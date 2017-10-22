@@ -1,0 +1,13 @@
+---
+title: "Intro to Entre Movie Project"
+output: html_notebook
+---
+### Show the data frame
+```{r}
+# load the json to a dataframe
+dt <- read_json("/Users/jeffchiang/Git/IMDB-Crawler/IMDB/imdb.json", simplifyVector = TRUE)
+library('DT')
+datatable(dt) # use dt package to visualize
+```
+
+
