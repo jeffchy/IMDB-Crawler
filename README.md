@@ -9,3 +9,11 @@ cd into IMDB dir and Run
 ```
   scrapy crawl imdb -o example.json
 ```
+
+### R
+prerequisite:
+* R studio(recommand)
+* package for R note book
+* package 'DT'
+* package 'ggplot2'
+* package 'jsonlite'
