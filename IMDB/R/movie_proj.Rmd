@@ -10,22 +10,85 @@ dt <- read_json("/Users/jeffchiang/Git/IMDB-Crawler/IMDB/imdb_raw.json", simplif
 # clean the data
 dt$index <- unlist(dt$index)
 dt$year <- unlist(dt$year)
+dt$year <- as.integer(dt$year)
 dt$url <- unlist(dt$url)
 dt$title <- unlist(dt$title)
 dt$certificate <- unlist(dt$certificate)
 dt$runtime <- unlist(dt$runtime)
+dt$runtime <- as.integer(dt$runtime)
 dt$rating <- unlist(dt$rating)
+dt$rating <- as.double(dt$rating)
 dt$votes <- unlist(dt$votes)
-dt$gross <- unlist(dt$gross)
+dt$votes <- as.integer(dt$votes)
+dt$gross <- as.double(dt$gross)
+dt$genre <- as.vector(dt$genre)
 library('DT')
-datatable(dt) # use dt package to visualize
+library(ggplot2)
+
+
 ```
 ### General Graph
 ```{r}
+# clean the year and rating
 library(ggplot2)
+dt.clean1<-subset(dt, year>2000 & year<2018 & !is.na(rating))
+datatable(dt.clean1) # use dt package to visualize
+genre_class <- unique(unlist(dt.clean1$genre))[-1] # get the genre class
+certificate_class <- unique(unlist(dt.clean1$certificate)) # get the genre class
+genre_count <- rep(0,length(genre_class))
+gross_count_by_genre <- rep(0,length(genre_class))
+votes_count_by_genre <- rep(0,length(genre_class))
+rating_count_by_genre <- rep(0,length(genre_class))
+genre <- dt.clean1$genre
+for (i in 1:length(genre)){
+  for (j in 1:length(genre_class)){
+    if(genre_class[j] %in% dt.clean1$genre[[i]]){
+      genre_count[j] <- genre_count[j]+1
+      gross_count_by_genre[j] <- gross_count_by_genre[j] + dt.clean1$gross[i]
+      rating_count_by_genre[j] <- rating_count_by_genre[j] + dt.clean1$rating[i]
+      if(!is.na(dt.clean1$votes[i])) votes_count_by_genre[j] <- votes_count_by_genre[j] + dt.clean1$votes[i]
+    }
+  }
+}
+avg_gross_by_genre <- gross_count_by_genre /genre_count
+avg_votes_by_genre <- votes_count_by_genre /genre_count
+avg_rating_by_genre <- rating_count_by_genre /genre_count
 
-ggplot(data = dt, aes(x=index, y=year)) +geom_point()
+
+dt.clean2 <- data.frame(genre_class=genre_class, genre_count=genre_count, gross_count_by_genre= gross_count_by_genre, votes_count_by_genre=votes_count_by_genre, rating_count_by_genre= rating_count_by_genre, avg_gross_by_genre = avg_gross_by_genre, avg_votes_by_genre = avg_votes_by_genre, avg_rating_by_genre = avg_rating_by_genre)
+
+ggplot(data=dt.clean2, aes(x=genre_class, y=gross_count_by_genre, fill=avg_rating_by_genre))+geom_bar(stat = "identity")+theme(axis.text.x = element_text(size = 10, vjust = 0.5, hjust = 0.5, angle = 45))+labs(title="Documentary Gross By Genre", x="genre")
+
+ggplot(data=dt.clean2, aes(x="", y=gross_count_by_genre, fill=genre_class))+geom_bar(stat = "identity")+ coord_polar("y")+theme(axis.text.x = element_text(size = 10, vjust = 0.5, hjust = 0.5, angle = 45))+labs(title="Documentary Gross By Genre", x="genre")
+
+ggplot(data=dt.clean2, aes(x=genre_class, y=votes_count_by_genre, fill=avg_rating_by_genre))+geom_bar(stat = "identity")+theme(axis.text.x = element_text(size = 10, vjust = 0.5, hjust = 0.5, angle = 45))+labs(title="Documentary Popularity By Genre", x="genre", y="votes")
+
+
+ggplot(data = dt.clean1, aes(x=year,))+geom_bar()+labs(title="Documentary 2000-2017",x="year")
+
+ggplot(data = dt.clean1, aes(x=gross,y=rating,colour="#FF9999"))+geom_point(alpha=I(1/3))+labs(title="rating and gross",x="gross")+geom_smooth()
 
 ```
+
+### extract the outstandings and losers
+```{r}
+outstanding <-subset(dt.clean1, gross>50 & rating>5)
+datatable(outstanding)
+
+high_gross_low_rating <- subset(dt.clean1, gross>50 & rating<2.5)
+datatable(high_gross_low_rating)
+
+
+loser <- subset(dt.clean1, votes>200 & gross<5 & rating<2.5)
+datatable(loser)
+
+
+
+
+
+```
+
+
+
 
 
