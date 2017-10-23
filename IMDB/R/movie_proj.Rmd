@@ -4,10 +4,28 @@ output: html_notebook
 ---
 ### Show the data frame
 ```{r}
+library(jsonlite)
 # load the json to a dataframe
-dt <- read_json("/Users/jeffchiang/Git/IMDB-Crawler/IMDB/imdb.json", simplifyVector = TRUE)
+dt <- read_json("/Users/jeffchiang/Git/IMDB-Crawler/IMDB/imdb_raw.json", simplifyVector = TRUE)
+# clean the data
+dt$index <- unlist(dt$index)
+dt$year <- unlist(dt$year)
+dt$url <- unlist(dt$url)
+dt$title <- unlist(dt$title)
+dt$certificate <- unlist(dt$certificate)
+dt$runtime <- unlist(dt$runtime)
+dt$rating <- unlist(dt$rating)
+dt$votes <- unlist(dt$votes)
+dt$gross <- unlist(dt$gross)
 library('DT')
 datatable(dt) # use dt package to visualize
+```
+### General Graph
+```{r}
+library(ggplot2)
+
+ggplot(data = dt, aes(x=index, y=year)) +geom_point()
+
 ```
 
 

@@ -17,13 +17,26 @@ class ImdbSpider(scrapy.Spider):
                 'year': [self.parseYear(item.css('span.lister-item-year::text').extract())],
                 'title': item.xpath('./h3/a/text()').extract(),
                 'url': ['http://www.imdb.com/'+item.xpath('./h3/a/@href').extract()[0]],
-                'certificate': item.xpath('./p/span[@class="certificate"]/text()').extract(),
+                'certificate': [self.parseCert(item.xpath('./p/span[@class="certificate"]/text()').extract())],
                 'runtime': [self.parseRuntime(item.xpath('./p/span[@class="runtime"]/text()').extract())],
                 'genre': item.xpath('./p/span[@class="genre"]/text()').extract()[0].replace(',','').split(),
-                'rating': item.xpath('./div/div/strong/text()').extract(),
+                'rating': [self.parseRating(item.xpath('./div/div/strong/text()').extract())],
                 'votes': [self.parseVote(item.xpath('./p/span[@name="nv"]/text()').extract())],
                 'gross': [self.parseGross(item.xpath('./p/span[@name="nv"]/text()').extract())]
             }
+    def parseRating(self, l):
+        if l:
+            return l[0]
+        else:
+            return 'NoRating'
+
+    def parseCert(self, l):
+        if l:
+            return l[0]
+        else:
+            return 'Unknown'
+
+
     def parseYear(self, l):
         if l:
             p = re.compile(r'\d{4}')
@@ -31,10 +44,10 @@ class ImdbSpider(scrapy.Spider):
             if temp:
                 return temp[0]
             else:
-                return None
+                return '1950'
 
         else:
-            return None
+            return '1950' # we abort 1950
 
 
     def parseIndex(self, l):
@@ -42,7 +55,7 @@ class ImdbSpider(scrapy.Spider):
             a = len(l[0])
             return l[0][:a-1]
         else:
-            return None
+            return '0'
 
     def parseVote(self, l):
         if l:
