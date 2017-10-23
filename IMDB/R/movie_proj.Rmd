@@ -82,6 +82,8 @@ datatable(high_gross_low_rating)
 loser <- subset(dt.clean1, votes>200 & gross<5 & rating<2.5)
 datatable(loser)
 
+really_great_ones <- subset(dt.clean1, votes>200 & rating>8.5)
+datatable(really_great_ones)
 
 
 
@@ -89,6 +91,10 @@ datatable(loser)
 ```
 
 
-
-
-
+http://www.imdb.com/title/tt4125222/plotsummary?ref_=tt_ov_pl
+http://www.imdb.com/title/tt4125222/plotsummary?ref_=tt_ov_pl
+http://www.imdb.com/title/tt4125222/plotsummary?ref_=tt_ov_pl
+http://www.imdb.com/title/tt4125222/plotsummary?ref_=tt_ov_pl
+http://www.imdb.com/title/tt4125222/plotsummary?ref_=tt_ov_pl
+http://www.imdb.com/title/tt4125222/plotsummary?ref_=tt_ov_pl
+http://www.imdb.com/title/tt4125222/plotsummary?ref_=tt_ov_pl
