@@ -57,14 +57,19 @@ avg_rating_by_genre <- rating_count_by_genre /genre_count
 
 dt.clean2 <- data.frame(genre_class=genre_class, genre_count=genre_count, gross_count_by_genre= gross_count_by_genre, votes_count_by_genre=votes_count_by_genre, rating_count_by_genre= rating_count_by_genre, avg_gross_by_genre = avg_gross_by_genre, avg_votes_by_genre = avg_votes_by_genre, avg_rating_by_genre = avg_rating_by_genre)
 
+ggplot(data = dt.clean1, aes(x=year,))+geom_bar()+labs(title="Documentary 2000-2017",x="year")
+
+ggplot(data=dt.clean2, aes(x="", y=genre_count, fill=genre_class))+geom_bar(stat = "identity")+ coord_polar("y")+theme(axis.text.x = element_text(size = 10, vjust = 0.5, hjust = 0.5, angle = 45))+labs(title="Documentary Counts By Genre", x="genre")
+
+ggplot(data=dt.clean2, aes(x=genre_class, y=votes_count_by_genre, fill=avg_rating_by_genre))+geom_bar(stat = "identity")+theme(axis.text.x = element_text(size = 10, vjust = 0.5, hjust = 0.5, angle = 45))+labs(title="Documentary IMDB Popularity By Genre", x="genre", y="votes")
+
 ggplot(data=dt.clean2, aes(x=genre_class, y=gross_count_by_genre, fill=avg_rating_by_genre))+geom_bar(stat = "identity")+theme(axis.text.x = element_text(size = 10, vjust = 0.5, hjust = 0.5, angle = 45))+labs(title="Documentary Gross By Genre", x="genre")
 
 ggplot(data=dt.clean2, aes(x="", y=gross_count_by_genre, fill=genre_class))+geom_bar(stat = "identity")+ coord_polar("y")+theme(axis.text.x = element_text(size = 10, vjust = 0.5, hjust = 0.5, angle = 45))+labs(title="Documentary Gross By Genre", x="genre")
 
-ggplot(data=dt.clean2, aes(x=genre_class, y=votes_count_by_genre, fill=avg_rating_by_genre))+geom_bar(stat = "identity")+theme(axis.text.x = element_text(size = 10, vjust = 0.5, hjust = 0.5, angle = 45))+labs(title="Documentary Popularity By Genre", x="genre", y="votes")
 
 
-ggplot(data = dt.clean1, aes(x=year,))+geom_bar()+labs(title="Documentary 2000-2017",x="year")
+
 
 ggplot(data = dt.clean1, aes(x=gross,y=rating,colour="#FF9999"))+geom_point(alpha=I(1/3))+labs(title="rating and gross",x="gross")+geom_smooth()
 
